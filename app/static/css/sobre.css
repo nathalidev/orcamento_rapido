@@ -1,0 +1,9 @@
+article li {
+  list-style-type: disc;
+}
+
+@media (max-width: 768px) {
+    main{
+        padding: 0 1.5rem;
+    }
+}

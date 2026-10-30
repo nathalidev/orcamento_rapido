@@ -1,0 +1,116 @@
+.conteudo-main form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: min(100%, 760px);
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(10, 35, 110, 0.2);
+  border-radius: 12px;
+  padding: 1.25rem;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+}
+
+.conteudo-main fieldset {
+  border: 1px solid rgba(10, 35, 110, 0.25);
+  border-radius: 10px;
+  padding: 1rem;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.conteudo-main legend {
+  font-weight: 700;
+  padding: 0 0.35rem;
+}
+
+.conteudo-main fieldset > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.conteudo-main label {
+  font-weight: 600;
+}
+
+.conteudo-main input,
+.conteudo-main textarea,
+.conteudo-main select {
+  width: 100%;
+  border: 1px solid rgba(0, 23, 82, 0.25);
+  border-radius: 8px;
+  padding: 0.7rem 0.8rem;
+  font: inherit;
+  color: inherit;
+  background-color: rgba(255, 255, 255, 0.95);
+}
+
+.conteudo-main input:focus,
+.conteudo-main textarea:focus,
+.conteudo-main select:focus {
+  outline: 2px solid rgba(56, 99, 230, 0.35);
+  border-color: rgb(56, 99, 230);
+}
+
+.conteudo-main form > div {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+}
+
+.conteudo-main button {
+  border: none;
+  border-radius: 8px;
+  padding: 0.7rem 1rem;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+}
+
+.conteudo-main button[type="reset"] {
+  background: rgba(255, 255, 255, 0.8);
+  color: var(--cor-texto);
+  border: 1px solid rgba(0, 23, 82, 0.25);
+}
+
+.conteudo-main button[type="reset"]:active {
+  background: rgba(204, 204, 204, 0.8);
+}
+
+.conteudo-main button[type="submit"],
+#adicionar-item {
+  background: var(--cor-principal);
+  color: var(--cor-fundo);
+}
+
+.conteudo-main button[type="submit"]:active,
+#adicionar-item:active {
+  background: rgb(3, 18, 63);
+}
+
+#form-contato{
+    width: 70%;
+}
+
+@media (max-width: 425px) {
+  .conteudo-main form {
+    padding: 1rem;
+    gap: 0.85rem;
+  }
+
+  .conteudo-main fieldset {
+    padding: 0.85rem;
+  }
+
+  .conteudo-main form > div {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .conteudo-main button {
+    width: 100%;
+  }
+}

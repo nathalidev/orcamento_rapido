@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar Orçamento</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/formularios.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/criar_orcamento.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+</head>
+<body>
+    
+    <nav aria-label="Navegação principal">
+        <ul class="ul-navbar">
+            <li>
+                <img class="logo-sistema" src="{{ url_for('static', filename='images/logo_app.png') }}" alt="Logo do sistema">
+            </li>
+            <li><a href="{{ url_for('home') }}"><strong>Home</strong></a></li>
+            <li><a href="{{ url_for('sobre') }}"><strong>Sobre</strong></a></li>
+            <li><a href="{{ url_for('contato') }}"><strong>Contato</strong></a></li>
+        </ul>
+    </nav>
+    <main>
+        <div class="orcamento-layout">
+            <section class="conteudo-main" aria-labelledby="info-orcamento">
+                <header class="header-texto">
+                    <h1>Novo orçamento</h1>
+                    <p>Preencha as informações abaixo para gerar seu orçamento.</p>
+                </header>
+                
+                <form method="POST" action="/orcamento"> <!-- o método define como os dados são transmitidos ao servidor. //  O atributo action do <form> define para qual rota/endpoint os dados serão enviados.Exemplo: <form action="/login" method="POST"> → os dados vão para a rota /login do Flask, que deve estar configurada para aceitar POST.-->
+                    <fieldset>
+                        <legend id="info-orcamento">
+                            <span class="material-symbols-outlined" aria-hidden="true">assignment_add</span>
+                            Informações do Orçamento
+                        </legend>
+
+                        <!-- Sua empresa -->
+                        <div>
+                            <label for="sua_empresa">Nome da sua empresa</label>
+                            <input type="text" id="sua_empresa" name="sua_empresa" required>
+                        </div>
+
+                        <div>
+                            <label for="email">Seu e-mail</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+
+                        <div>
+                            <label for="seu_site">Seu site</label>
+                            <input type="url" id="seu_site" name="seu_site" placeholder="https://www.seusite.com">
+                        </div>
+
+                        <div>
+                            <label for="telefone_sua_empresa">Telefone da sua empresa</label>
+                            <input type="tel" id="telefone_sua_empresa" name="telefone_sua_empresa" required>
+                        </div>
+
+                        <!-- Cliente -->
+                        <div>
+                            <label for="nome_cliente">Nome do cliente</label>
+                            <input type="text" id="nome_cliente" name="nome_cliente" required>
+                        </div>
+
+                        <div>
+                            <label for="telefone_cliente">Telefone do cliente</label>
+                            <input type="tel" id="telefone_cliente" name="telefone_cliente" required>
+                        </div>
+
+                        <div>
+                            <label for="email_cliente">E-mail do cliente</label>
+                            <input type="email" id="email_cliente" name="email_cliente" required>
+                        </div>
+
+                        <!-- Validade -->
+                        <div>
+                            <label for="inserir_validade">Inserir validade no orçamento?</label>
+                            <select id="inserir_validade" name="inserir_validade">
+                                <option value="sim">Sim</option>
+                                <option value="nao">Não</option>
+                            </select>
+                        </div>
+
+                        <div id="campo-validade" style="display: none;">
+                            <label for="data_validade">Validade</label>
+                            <input type="date" id="data_validade" name="data_validade">
+                        </div>
+
+                        <!-- Itens -->
+                        <div>
+                            <label for="servico_item">Serviço / Item</label>
+                            <input type="text" id="servico_item" name="servico_item" required>
+                        </div>
+
+                        <div>
+                            <label for="quantidade">Quantidade</label>
+                            <input type="number" id="quantidade" name="quantidade" min="1" value="1" required>
+                        </div>
+
+                        <div>
+                            <label for="valor">Valor unitário</label>
+                            <input type="number" id="valor" name="valor" step="0.01" placeholder="0.00" required>
+                        </div>
+
+                        <div>
+                            <label for="desconto">Desconto (R$)</label>
+                            <input type="number" id="desconto" name="desconto" step="0.01" placeholder="0.00" value="0">
+                        </div>
+
+                        <div>
+                            <button type="button" id="adicionar-item"> + Adicionar item</button>
+                        </div>
+
+                        <!-- Observações -->
+                        <div>
+                            <label for="observacoes">Observações adicionais</label>
+                            <textarea id="observacoes" name="observacoes"></textarea>
+                        </div>
+
+                        <!-- Prazo -->
+                        <div>
+                            <label for="prazo">Prazo de entrega</label>
+                            <input type="date" id="prazo" name="prazo" required>
+                        </div>
+
+                        <!-- Condições de pagamento -->
+                        <div>
+                            <label for="condicoes_pagamento">Condições de pagamento</label>
+                            <input type="text" id="condicoes_pagamento" name="condicoes_pagamento"
+                                placeholder="Ex: À vista ou em até 3× sem juros">
+                        </div>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>
+                            <span class="material-symbols-outlined" aria-hidden="true">data_alert</span>
+                            Importante
+                        </legend>
+                        <p>Revise todas as informações antes de gerar o PDF.</p>
+                    </fieldset>
+
+                    <div>
+                        <button type="reset">
+                            <span class="material-symbols-outlined" aria-hidden="true">delete_forever</span>
+                            Limpar campos
+                        </button>
+                        <button type="submit">
+                            <span class="material-symbols-outlined simbolo-pdf">picture_as_pdf</span>
+                            Gerar PDF
+                        </button>
+                    </div>
+                </form>
+            </section>
+            <section class="conteudo-main preview-orcamento" aria-labelledby="previa-orcamento">
+                <header class="header-texto">
+                    <h1 id="previa-orcamento">Prévia do orçamento</h1>
+                </header>
+                <div class="preview-vazia" aria-hidden="true">
+                    <iframe 
+                        id="meuIframe"
+                        src="{{ url_for('orcamento') }}"
+                        width="100%" 
+                        height="auto" 
+                        name="meuIframe" 
+                        sandbox="allow-scripts allow-same-origin allowfullscreen" 
+                        allow="camera; microphone; geolocation" 
+                        loading="eager" 
+                        allowfullscreen
+                        frameborder="0">
+                    </iframe>
+                </div>
+            </section>
+        </div>
+        <footer>
+            <p>© 2026 Orçamento Rápido</p>
+        </footer>
+    </main>
+    <script src="{{ url_for('static', filename='js/preview.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/itens_orcamento.js') }}"></script>
+</body>
+</html>
+
+<!-- Use <section> quando:
+O bloco teria sentido com um título. -->

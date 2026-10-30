@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orçamento Rápido</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+</head>
+<body>
+    
+    <nav>
+        <ul class="ul-navbar">
+            <img class="logo-sistema" src="{{ url_for('static', filename='images/logo_app.png') }}" alt="Logo do sistema">
+            <li><a href="{{ url_for('criar_orcamento') }}">Criar orçamento</a></li>
+                <li><a href="{{ url_for('sobre') }}">Sobre</a></li>
+            <li><a href="{{ url_for('contato') }}">Contato</a></li>
+        </ul>
+    </nav>
+    
+    <main>
+        <section class="secao_site secao-beneficios">
+            <div class="beneficio beneficio--rapido">
+                <h3>⚡ Rápido</h3>
+                <p>Crie orçamentos em menos de 30 segundos.</p>
+            </div>
+            
+            <div class="beneficio beneficio--profissional">
+                <h3>📄 Profissional</h3>
+                <p>PDFs organizados e prontos para enviar.</p>
+            </div>
+
+            <div class="beneficio beneficio--simples">
+                <h3>📱 Simples</h3>
+                <p>Funciona direto do celular ou computador.</p>
+            </div>
+        </section>
+        <header>
+            <div class="header-texto">
+                <h3>Bem vindo(a) ao nosso sistema!</h3>
+                <p>Do WhatsApp bagunçado ao orçamento elegante.</p>
+                <p>Crie orçamentos profissionais em segundos. Gere PDFs organizados, rápidos e prontos para enviar aos seus clientes sem complicação.</p>
+            </div>
+            <div class="header-imagem">
+                <img class="orcamento-imagem" src="{{ url_for('static', filename='images/orcamento_imagem.png') }}" alt="Exemplo de Orçamento">
+                <img class="calculadora-caneta" src="{{ url_for('static', filename='images/calculadora_caneta.png') }}" alt="Calculadora e caneta">
+            </div>
+        </header>
+        
+
+        <div class="conteudo-main">
+            
+            <h2>Mas e como funciona?</h2>
+            <section class="secao_site secao-explicacao">
+
+                <div class="card_passo">
+                    <img class="preenchendo-form" src="{{ url_for('static', filename='images/preenchendo_form.png') }}" alt="Icone do card">
+                    <h3>Preencha as informações</h3>
+                    <p>Adicione os dados do cliente, serviço, valor e descrição.</p>
+                </div>
+
+                <div class="card_passo">
+                    <img class="pdf-icone" src="{{ url_for('static', filename='images/icone_pdf.png') }}" alt="Icone do card">
+                    <h3>Gere o PDF</h3>
+                    <p>O sistema cria automaticamente um orçamento profissional.</p>
+                </div>
+
+                <div class="card_passo">
+                    <img class="envio-icone" src="{{ url_for('static', filename='images/envio_icone.png') }}" alt="Icone do card">
+                    <h3>Envie para o cliente</h3>
+                    <p>Baixe o PDF pronto e envie pelo whatsapp ou email.</p>
+                </div>
+
+                
+            </section>
+            <footer>
+                <p>© 2026 Orçamento Rápido</p>
+            </footer>
+        </div>
+    </main>
+</body>
+</html>
+
+<!-- Use <section> quando:
+O bloco teria sentido com um título. -->

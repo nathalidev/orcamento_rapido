@@ -1,0 +1,92 @@
+.contato-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+	justify-content: center;
+	justify-items: center;
+	gap: 1.25rem;
+	width: 100%;
+	margin: 0 1.25rem;
+	padding: 1.25rem;
+}
+
+.conteudo-main {
+	padding: 3%;
+}
+
+.conteudo-main form {
+	align-self: stretch;
+}
+
+.contato-card {
+	display: flex;
+	height: 50%;
+	width: min(100%, 280px);
+	min-width: 0;
+	justify-content: center;
+	align-items: center;
+	border: 1px solid rgba(10, 35, 110, 0.15);
+	border-radius: 12px;
+	background: rgba(255, 255, 255, 0.75);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+	transition: transform 160ms ease, box-shadow 160ms ease;
+}
+
+.contato-card:hover {
+	transform: translateY(-3px);
+	box-shadow: 0 8px 18px rgba(0, 0, 0, 0.18);
+}
+
+.contato-link {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.75rem;
+	width: 100%;
+	min-height: clamp(6rem, 12vw, 9rem);
+	padding: 1rem;
+	color: var(--cor-principal);
+	text-align: center;
+}
+
+#whats_icone,
+#linkedin,
+.icone {
+	width: 1.5rem;
+	height: 1.5rem;
+	flex-shrink: 0;
+	object-fit: contain;
+}
+
+.icone {
+	font-size: 1.5rem;
+	line-height: 1;
+}
+
+@media (max-width: 768px) {
+	.contato-page {
+		padding: 1rem;
+	}
+
+	.contato-grid {
+		display: flex;
+		flex-direction: row;
+		grid-template-columns: 1fr;
+		width: 100%;
+		margin: 0;
+		justify-content: space-around;
+	}
+
+	.contato-card {
+		height: auto;
+		width: auto;
+	}
+
+	.contato-link {
+		min-height: 4rem;
+		padding: 0.75rem;
+	}
+
+    a{
+        font-size: 0.7rem;
+    }
+}

@@ -1,0 +1,173 @@
+main {
+  padding: 1rem;
+}
+
+.simbolo-pdf {
+  color: white;
+}
+
+footer {
+  width: 100%;
+  margin-top: 1rem;
+  text-align: center;
+  position: static;
+  bottom: auto;
+}
+
+.orcamento-layout {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+  align-content: stretch;
+  width: 100%;
+}
+
+.conteudo-main {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  height: 100%;
+  margin: 0;
+  min-height: 0;
+  font-size: 1rem;
+}
+
+.conteudo-main form {
+  flex: 1 1 auto;
+  width: 100%;
+  min-height: 0;
+}
+
+.preview-orcamento {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0; /* mesmo peso que .conteudo-main */
+  min-width: 0;
+  height: auto;
+}
+
+#meuIframe {
+  width: 100%;
+  border: none;
+  display: block;
+}
+
+.preview-vazia {
+  flex: 0 0 auto;
+  min-height: 0;
+  width: 100%;
+  border: 1px dashed rgba(10, 35, 110, 0.25);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.45);
+  padding: 1rem;
+  height: auto;
+  overflow: visible;
+}
+
+.header-texto {
+  min-height: 6.5rem;
+}
+
+@media (max-width: 768px) {
+
+  body {
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  .logo-sistema {
+    width: 34vw;
+    max-width: 140px;
+    min-width: 90px;
+  }
+
+  nav {
+  background: linear-gradient(
+    90deg,
+    #ffffff 30%,
+    #aab3c7 80%,
+    #899fd3 90%
+  );
+}
+
+  li {
+    margin-left: 0;
+  }
+
+  a {
+    font-size: clamp(0.8rem, 3.5vw, 1rem);
+  }
+
+  main {
+    width: 100%;
+    padding: 0.75rem;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .orcamento-layout {
+    flex-direction: column;
+    gap: 0.75rem;
+    display: block;
+  }
+
+  .conteudo-main,
+  .preview-orcamento {
+    width: 100%;
+    min-height: auto;
+    height: auto;
+    display:block;
+  }
+
+  .conteudo-main form,
+  .preview-vazia {
+    width: 100%;
+  }
+
+  .header-texto {
+    gap: 0.35rem;
+    min-height: 4.5rem;
+  }
+
+  .header-texto h1,
+  .header-texto p,
+  .conteudo-main legend,
+  .preview-orcamento h1 {
+    text-align: center;
+  }
+
+  .preview-orcamento {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    height: auto;
+  }
+
+  .preview-vazia {
+    min-height: 12rem;
+  }
+
+  .header-texto h1, #previa-orcamento h1 {
+    font-size: clamp(1.5rem, 6vw, 2rem);
+  }
+
+  .header-texto p {
+    font-size: clamp(0.75rem, 4vw, 1.25rem);
+  }
+
+  .header-texto form{
+    font-size: clamp(0.75rem, 4vw, 1.25rem);
+  }
+
+  .preview-orcamento{
+    margin-top: 8rem;
+  }
+
+  footer {
+    width: 100%;
+    margin-top: 0.5rem;
+    text-align: center;
+  }
+}

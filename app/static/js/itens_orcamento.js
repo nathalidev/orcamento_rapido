@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
 
+
     const botaoAdicionar =
         document.getElementById("adicionar-item");
 
@@ -21,6 +22,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Guarda todos os itens adicionados
     let itens = [];
+
+    if (itens.length > 0) {
+        servico.removeAttribute("required");
+        valor.removeAttribute("required");
+    }
 
 
     // Guarda o índice do item que está sendo editado

@@ -1,5 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
 
+    const iframe =
+        document.getElementById("meuIframe");
 
     const botaoAdicionar =
         document.getElementById("adicionar-item");
@@ -15,10 +17,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const desconto =
         document.getElementById("desconto");
-
-    const iframe =
-        document.getElementById("meuIframe");
-
 
     // Guarda todos os itens adicionados
     let itens = [];
@@ -98,6 +96,8 @@ document.addEventListener("DOMContentLoaded", () => {
         renderizarItens();
 
         limparCampos();
+
+        atualizarResumo();
     }
 
 
@@ -287,6 +287,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         atualizarCampoHidden();
         renderizarItens();
+        atualizarResumo();
     }
 
 
@@ -331,10 +332,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         atualizarCampoHidden();
 
-        console.log(
-            "Editando item:",
-            index
-        );
+        atualizarResumo();
     }
 
 
@@ -374,6 +372,56 @@ document.addEventListener("DOMContentLoaded", () => {
     function atualizarCampoHidden() {
         document.getElementById("itens_orcamento").value =
             JSON.stringify(itens);
+    }
+
+    function atualizarSubtotal(doc) {
+        const subtotal = itens.reduce(
+            (acc, item) => {
+                return acc + (item.quantidade * item.valor);
+            },
+            0
+        );
+
+        doc.getElementById("subtotal").textContent =
+            formatarMoeda(subtotal);
+
+        return subtotal;
+    }
+
+    function atualizarDesconto(doc) {
+        const desconto = itens.reduce(
+            (acc, item) => {
+                return acc + item.desconto;
+            },
+            0
+        );
+
+        doc.getElementById("preview_desconto").textContent =
+            formatarMoeda(desconto);
+
+        return desconto;
+    }
+
+    function atualizarTotal(total, doc) {
+        doc.getElementById("total-tudo").textContent =
+            formatarMoeda(total);
+    }
+
+    function atualizarResumo() {
+        const doc = iframe.contentDocument;
+
+        if (!doc) {
+            console.error(
+                "Não foi possível acessar o iframe para atualizar o resumo."
+            );
+
+            return;
+        }
+
+        const subtotal = atualizarSubtotal(doc);
+        const desconto = atualizarDesconto(doc);
+
+        atualizarTotal(subtotal - desconto, doc);
     }
 
 });

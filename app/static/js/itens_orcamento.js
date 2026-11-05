@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
 
+
     const botaoAdicionar =
         document.getElementById("adicionar-item");
 
@@ -22,6 +23,11 @@ document.addEventListener("DOMContentLoaded", () => {
     // Guarda todos os itens adicionados
     let itens = [];
 
+    if (itens.length > 0) {
+        servico.removeAttribute("required");
+        valor.removeAttribute("required");
+    }
+
 
     // Guarda o índice do item que está sendo editado
     // null significa que estamos adicionando um item novo
@@ -39,6 +45,11 @@ document.addEventListener("DOMContentLoaded", () => {
     // ADICIONAR / EDITAR ITEM
     // --------------------------------
 
+    /**
+     * Adiciona um item novo ou substitui o item que está sendo editado.
+     * Exemplo: indiceEditando === null adiciona ao final; indiceEditando === 2
+     * substitui o item que está na posição 2.
+     */
     function adicionarItem() {
 
         const novoItem = {
@@ -82,6 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
             indiceEditando = null;
         }
 
+        atualizarCampoHidden();
 
         renderizarItens();
 
@@ -192,8 +204,27 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             );
 
+            const botaoExcluir = doc.createElement("button");
+                
+            botaoExcluir.textContent =
+                "Excluir";  
+
+            botaoExcluir.classList.add("botao-excluir");
+
+            botaoExcluir.addEventListener(
+                "click",
+                () => {
+
+                    removerItem(index);
+                }
+            );
+
             colunaAcoes.appendChild(
                 botaoEditar
+            );
+
+            colunaAcoes.appendChild(
+                botaoExcluir
             );
 
 
@@ -229,9 +260,45 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     // --------------------------------
+    // EXCLUIR ITEM
+    // --------------------------------
+
+    /**
+     * Remove um item e mantém correto o índice de uma edição em andamento.
+     * Exemplo: se indiceEditando === 3 e o índice 2 for removido, o item
+     * editado passa para a posição 2 e indiceEditando também passa a valer 2.
+     */
+    function removerItem(index) {
+
+        itens.splice(index, 1);
+
+        if (indiceEditando === index) {
+
+            indiceEditando = null;
+            limparCampos();
+
+        } else if (
+            indiceEditando !== null
+            && indiceEditando > index
+        ) {
+
+            indiceEditando -= 1;
+        }
+
+        atualizarCampoHidden();
+        renderizarItens();
+    }
+
+
+    // --------------------------------
     // EDITAR ITEM
     // --------------------------------
 
+    /**
+     * Carrega um item nos campos do formulário e guarda sua posição.
+     * Exemplo: editarItem(2) define indiceEditando como 2 para que o próximo
+     * envio substitua itens[2], em vez de adicionar outro item.
+     */
     function editarItem(index) {
 
         const item =
@@ -262,6 +329,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // Coloca o cursor no campo
         servico.focus();
 
+        atualizarCampoHidden();
 
         console.log(
             "Editando item:",
@@ -301,6 +369,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 currency: "BRL"
             }
         );
+    }
+
+    function atualizarCampoHidden() {
+        document.getElementById("itens_orcamento").value =
+            JSON.stringify(itens);
     }
 
 });

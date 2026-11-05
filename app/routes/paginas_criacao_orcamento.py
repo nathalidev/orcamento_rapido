@@ -1,10 +1,10 @@
-from flask import render_template, request #função do flask para renderização de pagina do front
-from flask import jsonify # função para retorno de dados em json pro front usar
-from flask import redirect, url_for #joga o usuário pra url em questão
-from app import app
+import json
 from decimal import Decimal
-
 from datetime import datetime
+
+from flask import abort, render_template, request
+
+from app import app
 
 @app.route("/")
 def home():
@@ -29,18 +29,46 @@ def orcamento():
     data_validade_ingles = request.form.get("data_validade")
     data_validade = datetime.strptime(data_validade_ingles, "%Y-%m-%d").strftime("%d/%m/%Y") if data_validade_ingles else "00/00/0000"
 
-    nome_servico_item = request.form.get("servico_item") if request.form.get("servico_item") != None else "Insira dados"
-    quantidade_item = int(request.form.get("quantidade")) if request.form.get("quantidade") != None else 0.0
-    valor_unitario = Decimal(request.form.get("valor")) if request.form.get("valor") != None else 0.0
-    valor_desconto = Decimal(request.form.get("desconto")) if request.form.get("desconto") != None else 0.0
-
     observacoes_adicionais = request.form.get("observacoes") if request.form.get("observacoes") != None else "Insira dados"
     prazo_entrega_ingles = request.form.get("prazo")
     prazo_entrega = datetime.strptime(prazo_entrega_ingles, "%Y-%m-%d").strftime("%d/%m/%Y") if prazo_entrega_ingles else "00/00/0000"
     condicoes_pagamento = request.form.get("condicoes_pagamento") if request.form.get("condicoes_pagamento") != None else "Insira dados"
     data_hoje = datetime.now().strftime("%d/%m/%Y")
-    subtotal = quantidade_item * valor_unitario if quantidade_item is not None and valor_unitario is not None else 0.0
-    total = subtotal - valor_desconto if subtotal is not None and valor_desconto is not None else 0.0
+
+    itens_json = request.form.get("itens_orcamento", "[]")
+    try:
+        itens_recebidos = json.loads(itens_json)
+    except json.JSONDecodeError:
+        abort(400, description="A lista de itens do orçamento é inválida.")
+
+    if not isinstance(itens_recebidos, list):
+        abort(400, description="A lista de itens do orçamento deve ser uma lista.")
+
+    itens = []
+    for item in itens_recebidos:
+        try:
+            quantidade = int(item["quantidade"])
+            valor_unitario = Decimal(str(item["valor"]))
+            desconto = Decimal(str(item.get("desconto", 0)))
+            descricao = str(item["servico"])
+        except (KeyError, TypeError, ValueError):
+            abort(400, description="Um dos itens do orçamento é inválido.")
+
+        total_item = (quantidade * valor_unitario) - desconto
+        itens.append({
+            "descricao": descricao,
+            "quantidade": quantidade,
+            "valor_unitario": valor_unitario,
+            "desconto": desconto,
+            "total": total_item,
+        })
+
+    subtotal = sum(
+        item["quantidade"] * item["valor_unitario"]
+        for item in itens
+    )
+    valor_desconto = sum(item["desconto"] for item in itens)
+    total = subtotal - valor_desconto
 
     context = {
         "nome_sua_empresa": nome_sua_empresa,
@@ -56,9 +84,7 @@ def orcamento():
         "inserir_validade": inserir_validade,
         "data_validade": data_validade,
 
-        "nome_servico_item": nome_servico_item,
-        "quantidade_item": quantidade_item,
-        "valor_unitario": valor_unitario,
+        "itens": itens,
         "valor_desconto": valor_desconto,
 
         "observacoes_adicionais": observacoes_adicionais,

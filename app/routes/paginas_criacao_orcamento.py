@@ -47,7 +47,7 @@ def orcamento():
     itens = []
     for item in itens_recebidos:
         try:
-            quantidade = int(item["quantidade"])
+            quantidade = Decimal(item["quantidade"])
             valor_unitario = Decimal(str(item["valor"]))
             desconto = Decimal(str(item.get("desconto", 0)))
             descricao = str(item["servico"])
@@ -64,10 +64,10 @@ def orcamento():
         })
 
     subtotal = sum(
-        item["quantidade"] * item["valor_unitario"]
+        Decimal(item["quantidade"]) * Decimal(item["valor_unitario"])
         for item in itens
     )
-    valor_desconto = sum(item["desconto"] for item in itens)
+    valor_desconto = sum(Decimal(item["desconto"]) for item in itens)
     total = subtotal - valor_desconto
 
     context = {

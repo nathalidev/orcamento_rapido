@@ -1,22 +1,38 @@
+import Big from "big.js";
 document.addEventListener("DOMContentLoaded", () => {
 
     const iframe =
         document.getElementById("meuIframe");
 
     const botaoAdicionar =
-        document.getElementById("adicionar-item");
+        document.getElementById("adicionar-item")
+
+    const servicoInput = document.getElementById("servico_item");
+    const quantidadeInput = document.getElementById("quantidade");
+    const valorInput = document.getElementById("valor");
+    const descontoInput = document.getElementById("desconto");
+    const inserirValidade = document.getElementById("inserir_validade");
 
     const servico =
-        document.getElementById("servico_item");
+        servicoInput.value
 
-    const quantidade =
-        document.getElementById("quantidade");
+    const quantidade = new Big(
+        quantidadeInput.value
+    );
 
-    const valor =
-        document.getElementById("valor");
+    const valor = new Big(
+        valorInput.value
+    );
 
-    const desconto =
-        document.getElementById("desconto");
+    const desconto = new Big(
+        descontoInput.value
+    );
+
+    inserirValidade.addEventListener("change", () => {
+        debugger;
+        console.log("Valor selecionado em inserirValidade:", inserirValidade.value);
+        exibirValidade(inserirValidade.value);
+    });
 
     // Guarda todos os itens adicionados
     let itens = [];
@@ -49,21 +65,15 @@ document.addEventListener("DOMContentLoaded", () => {
      * substitui o item que está na posição 2.
      */
     function adicionarItem() {
-
         const novoItem = {
-
-            servico:
-                servico.value.trim(),
-
-            quantidade:
-                Number(quantidade.value),
-
-            valor:
-                Number(valor.value),
-
-            desconto:
-                Number(desconto.value) || 0
+            servico: servicoInput.value.trim(),
+            quantidade: Number(quantidadeInput.value),
+            valor: valorInput.value.trim() || "0",
+            desconto: descontoInput.value.trim() || "0"
         };
+
+        const valor = new Big(novoItem.valor);
+        const desconto = new Big(novoItem.desconto);
 
 
         // Evita adicionar item vazio
@@ -162,9 +172,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
             // Calcula o total do item
-            const total =
-                (item.quantidade * item.valor)
-                - item.desconto;
+            const total = new Big(item.valor)
+                .times(item.quantidade)
+                .minus(item.desconto);
 
 
             colunaServico.textContent =
@@ -205,9 +215,9 @@ document.addEventListener("DOMContentLoaded", () => {
             );
 
             const botaoExcluir = doc.createElement("button");
-                
+
             botaoExcluir.textContent =
-                "Excluir";  
+                "Excluir";
 
             botaoExcluir.classList.add("botao-excluir");
 

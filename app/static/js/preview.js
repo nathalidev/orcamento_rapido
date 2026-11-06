@@ -50,15 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const regex = /^[A-Za-zÀ-ÿ\s]+$/;
 
-    function exibirValidade() {
-        inserirValidade.addEventListener("change", function () {
-            if (this.value === "sim") {
-                campoValidade.style.display = "block";
-            } else {
-                campoValidade.style.display = "none";
-            }
-        });
-    }
+    exibirValidade(inserirValidade); //devo arrumar a chamada 
 
     function pegarValorExibir(campoDoInput, campoDoOrcamento, doc) {
         const campoEmpresa = document.getElementById(campoDoInput);

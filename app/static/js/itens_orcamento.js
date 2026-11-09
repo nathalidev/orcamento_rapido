@@ -1,4 +1,3 @@
-import Big from "big.js";
 document.addEventListener("DOMContentLoaded", () => {
 
     const iframe =
@@ -27,12 +26,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const desconto = new Big(
         descontoInput.value
     );
-
-    inserirValidade.addEventListener("change", () => {
-        debugger;
-        console.log("Valor selecionado em inserirValidade:", inserirValidade.value);
-        exibirValidade(inserirValidade.value);
-    });
 
     // Guarda todos os itens adicionados
     let itens = [];
@@ -71,10 +64,6 @@ document.addEventListener("DOMContentLoaded", () => {
             valor: valorInput.value.trim() || "0",
             desconto: descontoInput.value.trim() || "0"
         };
-
-        const valor = new Big(novoItem.valor);
-        const desconto = new Big(novoItem.desconto);
-
 
         // Evita adicionar item vazio
         if (!novoItem.servico) {
@@ -360,7 +349,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         desconto.value = 0;
 
-        servico.focus();
+        servicoInput.focus();
     }
 
 
@@ -429,7 +418,9 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         const subtotal = atualizarSubtotal(doc);
+        console.log("Subtotal calculado:", subtotal);
         const desconto = atualizarDesconto(doc);
+        console.log("Desconto calculado:", desconto);
 
         atualizarTotal(subtotal - desconto, doc);
     }

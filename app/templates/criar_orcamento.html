@@ -100,7 +100,7 @@
 
                         <div>
                             <label for="valor">Valor unitário</label>
-                            <input type="number" id="valor" name="valor" step="0.01" placeholder="0.00" required>
+                            <input type="number" id="valor" name="valor" step="0.01" placeholder="0.00" value="0" required>
                         </div>
 
                         <div>
@@ -165,10 +165,8 @@
                         width="100%" 
                         height="auto" 
                         name="meuIframe" 
-                        sandbox="allow-scripts allow-same-origin allowfullscreen" 
                         allow="camera; microphone; geolocation" 
                         loading="eager" 
-                        allowfullscreen
                         frameborder="0">
                     </iframe>
                 </div>
@@ -180,6 +178,7 @@
     </main>
     <script src="{{ url_for('static', filename='js/validade.js') }}"></script>
     <script src="{{ url_for('static', filename='js/preview.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/big.js@6.2.2/big.min.js"></script>
     <script src="{{ url_for('static', filename='js/itens_orcamento.js') }}"></script>
 </body>
 </html>

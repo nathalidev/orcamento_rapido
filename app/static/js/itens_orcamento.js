@@ -12,21 +12,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const descontoInput = document.getElementById("desconto");
     const inserirValidade = document.getElementById("inserir_validade");
 
-    const servico =
-        servicoInput.value
-
-    const quantidade = new Big(
-        quantidadeInput.value
-    );
-
-    const valor = new Big(
-        valorInput.value
-    );
-
-    const desconto = new Big(
-        descontoInput.value
-    );
-
     // Guarda todos os itens adicionados
     let itens = [];
 
@@ -58,11 +43,15 @@ document.addEventListener("DOMContentLoaded", () => {
      * substitui o item que está na posição 2.
      */
     function adicionarItem() {
+        const quantidade = Number(quantidadeInput.value) || 0;
+        const valor = Number(valorInput.value) || 0;
+        const desconto = Number(descontoInput.value) || 0;
+
         const novoItem = {
             servico: servicoInput.value.trim(),
-            quantidade: Number(quantidadeInput.value),
-            valor: valorInput.value.trim() || "0",
-            desconto: descontoInput.value.trim() || "0"
+            quantidade,
+            valor,
+            desconto
         };
 
         // Evita adicionar item vazio
@@ -359,7 +348,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function formatarMoeda(valor) {
 
-        return valor.toLocaleString(
+        const numero =
+            typeof valor === "object"
+                ? Number(valor.toString())
+                : Number(valor);
+
+        return numero.toLocaleString(
             "pt-BR",
             {
                 style: "currency",
@@ -376,9 +370,9 @@ document.addEventListener("DOMContentLoaded", () => {
     function atualizarSubtotal(doc) {
         const subtotal = itens.reduce(
             (acc, item) => {
-                return acc + (item.quantidade * item.valor);
+                return acc.plus(new Big(item.quantidade).times(new Big(item.valor)));
             },
-            0
+            new Big(0)
         );
 
         doc.getElementById("subtotal").textContent =
@@ -389,11 +383,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function atualizarDesconto(doc) {
         const desconto = itens.reduce(
-            (acc, item) => {
-                return acc + item.desconto;
-            },
-            0
+            (total, item) => total.plus(new Big(item.desconto)),
+            new Big(0)
         );
+
 
         doc.getElementById("preview_desconto").textContent =
             formatarMoeda(desconto);

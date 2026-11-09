@@ -50,7 +50,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const regex = /^[A-Za-zÀ-ÿ\s]+$/;
 
-    exibirValidade(inserirValidade); //devo arrumar a chamada 
 
     function pegarValorExibir(campoDoInput, campoDoOrcamento, doc) {
         const campoEmpresa = document.getElementById(campoDoInput);
@@ -68,8 +67,6 @@ document.addEventListener('DOMContentLoaded', () => {
         ["telefone_cliente", "telefone-cliente"],
         ["email_cliente", "email-cliente"],
 
-        ["data_validade", "validade"],
-
         ["observacoes", "observacoes-adicionais"],
         ["prazo", "preview_prazo"],
         ["condicoes_pagamento", "preview_condicoes_pagamento"]
@@ -77,7 +74,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     
     const iframe = document.getElementById("meuIframe");
-
     function iniciarPreview() {
         const doc = iframe.contentDocument;
 

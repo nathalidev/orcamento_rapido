@@ -49,7 +49,7 @@ def orcamento():
         try:
             quantidade = Decimal(item["quantidade"])
             valor_unitario = Decimal(str(item["valor"]))
-            desconto = Decimal(str(item.get("desconto", 0)))
+            desconto = Decimal(str(item.get("desconto") or 0))
             descricao = str(item["servico"])
         except (KeyError, TypeError, ValueError):
             abort(400, description="Um dos itens do orçamento é inválido.")

@@ -1,5 +1,18 @@
 document.addEventListener("DOMContentLoaded", () => {
 
+    const servico =
+        document.getElementById("servico_item");
+
+    const quantidade =
+        document.getElementById("quantidade");
+
+    const valor =
+        document.getElementById("valor");
+
+    const desconto =
+        document.getElementById("desconto");
+
+
     const iframe =
         document.getElementById("meuIframe");
 

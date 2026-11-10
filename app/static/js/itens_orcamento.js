@@ -28,12 +28,6 @@ document.addEventListener("DOMContentLoaded", () => {
     // Guarda todos os itens adicionados
     let itens = [];
 
-    if (itens.length > 0) {
-        servico.removeAttribute("required");
-        valor.removeAttribute("required");
-    }
-
-
     // Guarda o índice do item que está sendo editado
     // null significa que estamos adicionando um item novo
     let indiceEditando = null;
@@ -55,7 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
      * Exemplo: indiceEditando === null adiciona ao final; indiceEditando === 2
      * substitui o item que está na posição 2.
      */
-    function adicionarItem() {
+    async function adicionarItem() {
         const quantidade = Number(quantidadeInput.value) || 0;
         const valor = Number(valorInput.value) || 0;
         const desconto = Number(descontoInput.value) || 0;
@@ -71,6 +65,27 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!novoItem.servico) {
 
             alert("Informe o serviço ou item.");
+
+            return;
+        }
+
+        if (novoItem.quantidade <= 0) {
+
+            alert("A quantidade deve ser maior que zero.");
+
+            return;
+        }
+
+        if (novoItem.valor < 0) {
+
+            alert("O valor não pode ser negativo.");
+
+            return;
+        }
+
+        if (novoItem.desconto < 0) {
+
+            alert("O desconto não pode ser negativo.");
 
             return;
         }
@@ -98,7 +113,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         limparCampos();
 
-        atualizarResumo();
+        await atualizarResumo();
     }
 
 
@@ -198,9 +213,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
             botaoEditar.addEventListener(
                 "click",
-                () => {
+                async () => {
 
-                    editarItem(index);
+                    await editarItem(index);
 
                 }
             );
@@ -269,7 +284,7 @@ document.addEventListener("DOMContentLoaded", () => {
      * Exemplo: se indiceEditando === 3 e o índice 2 for removido, o item
      * editado passa para a posição 2 e indiceEditando também passa a valer 2.
      */
-    function removerItem(index) {
+    async function removerItem(index) {
 
         itens.splice(index, 1);
 
@@ -288,7 +303,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         atualizarCampoHidden();
         renderizarItens();
-        atualizarResumo();
+        await atualizarResumo();
     }
 
 
@@ -301,7 +316,7 @@ document.addEventListener("DOMContentLoaded", () => {
      * Exemplo: editarItem(2) define indiceEditando como 2 para que o próximo
      * envio substitua itens[2], em vez de adicionar outro item.
      */
-    function editarItem(index) {
+    async function editarItem(index) {
 
         const item =
             itens[index];
@@ -333,7 +348,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         atualizarCampoHidden();
 
-        atualizarResumo();
+        await atualizarResumo();
     }
 
 
@@ -380,39 +395,7 @@ document.addEventListener("DOMContentLoaded", () => {
             JSON.stringify(itens);
     }
 
-    function atualizarSubtotal(doc) {
-        const subtotal = itens.reduce(
-            (acc, item) => {
-                return acc.plus(new Big(item.quantidade).times(new Big(item.valor)));
-            },
-            new Big(0)
-        );
-
-        doc.getElementById("subtotal").textContent =
-            formatarMoeda(subtotal);
-
-        return subtotal;
-    }
-
-    function atualizarDesconto(doc) {
-        const desconto = itens.reduce(
-            (total, item) => total.plus(new Big(item.desconto)),
-            new Big(0)
-        );
-
-
-        doc.getElementById("preview_desconto").textContent =
-            formatarMoeda(desconto);
-
-        return desconto;
-    }
-
-    function atualizarTotal(total, doc) {
-        doc.getElementById("total-tudo").textContent =
-            formatarMoeda(total);
-    }
-
-    function atualizarResumo() {
+    async function atualizarResumo() {
         const doc = iframe.contentDocument;
 
         if (!doc) {
@@ -423,12 +406,69 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        const subtotal = atualizarSubtotal(doc);
-        console.log("Subtotal calculado:", subtotal);
-        const desconto = atualizarDesconto(doc);
-        console.log("Desconto calculado:", desconto);
+        try {
+            const respostaSubtotal = await fetch("/atualizar-subtotal", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(itens)
+            });
 
-        atualizarTotal(subtotal - desconto, doc);
+            if (!respostaSubtotal.ok) {
+                throw new Error(
+                    `Falha ao atualizar subtotal: HTTP ${respostaSubtotal.status}`
+                );
+            }
+
+            const dadosSubtotal = await respostaSubtotal.json();
+            const subtotal = new Big(dadosSubtotal.subtotal);
+
+            doc.getElementById("subtotal").textContent =
+                formatarMoeda(subtotal);
+
+            const respostaDesconto = await fetch("/atualizar-desconto", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(itens)
+            });
+
+            if (!respostaDesconto.ok) {
+                throw new Error(
+                    `Falha ao atualizar desconto: HTTP ${respostaDesconto.status}`
+                );
+            }
+
+            const dadosDesconto = await respostaDesconto.json();
+            const desconto = new Big(dadosDesconto.desconto);
+
+            doc.getElementById("preview_desconto").textContent =
+                formatarMoeda(desconto);
+
+            const respostaTotal = await fetch("/atualizar-total", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(itens)
+            });
+
+            if (!respostaTotal.ok) {
+                throw new Error(
+                    `Falha ao atualizar total: HTTP ${respostaTotal.status}`
+                );
+            }
+
+            const dadosTotal = await respostaTotal.json();
+            const total = new Big(dadosTotal.total);
+
+            doc.getElementById("total-tudo").textContent =
+                formatarMoeda(total);
+        } catch (erro) {
+            console.error("Não foi possível atualizar o resumo.", erro);
+        }
     }
 
 });

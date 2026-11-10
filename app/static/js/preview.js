@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const inserirValidade = document.getElementById("inserir_validade");
   const campoValidade = document.getElementById("campo-validade");
   const dataValidade = document.getElementById("data_validade");
-  dataValidade.min = hoje;
+  dataValidade.min = new Date().toISOString().split("T")[0];
   dataValidade.max = "9999-12-31";
   
   // Itens

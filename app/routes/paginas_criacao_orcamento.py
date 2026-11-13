@@ -1,8 +1,8 @@
 import json
-from decimal import Decimal
+from decimal import Decimal, InvalidOperation
 from datetime import datetime
 
-from flask import abort, render_template, request
+from flask import abort, jsonify, render_template, request
 
 from app import app
 
@@ -27,11 +27,18 @@ def orcamento():
 
     inserir_validade = request.form.get("inserir_validade")
     data_validade_ingles = request.form.get("data_validade")
-    data_validade = datetime.strptime(data_validade_ingles, "%Y-%m-%d").strftime("%d/%m/%Y") if data_validade_ingles else "00/00/0000"
+    try:
+        data_validade = datetime.strptime(data_validade_ingles, "%Y-%m-%d").strftime("%d/%m/%Y") if data_validade_ingles else "00/00/0000"
+    except ValueError:
+        abort(400, description="A data de validade é inválida.")
 
     observacoes_adicionais = request.form.get("observacoes") if request.form.get("observacoes") != None else "Insira dados"
     prazo_entrega_ingles = request.form.get("prazo")
-    prazo_entrega = datetime.strptime(prazo_entrega_ingles, "%Y-%m-%d").strftime("%d/%m/%Y") if prazo_entrega_ingles else "00/00/0000"
+    try: 
+        prazo_entrega = datetime.strptime(prazo_entrega_ingles, "%Y-%m-%d").strftime("%d/%m/%Y") if prazo_entrega_ingles else "00/00/0000"
+    except ValueError:
+        abort(400, description="O prazo de entrega é inválido.")
+
     condicoes_pagamento = request.form.get("condicoes_pagamento") if request.form.get("condicoes_pagamento") != None else "Insira dados"
     data_hoje = datetime.now().strftime("%d/%m/%Y")
 
@@ -43,15 +50,14 @@ def orcamento():
 
     if not isinstance(itens_recebidos, list):
         abort(400, description="A lista de itens do orçamento deve ser uma lista.")
-
     itens = []
     for item in itens_recebidos:
         try:
-            quantidade = int(item["quantidade"])
+            quantidade = Decimal(str(item["quantidade"]))
             valor_unitario = Decimal(str(item["valor"]))
-            desconto = Decimal(str(item.get("desconto", 0)))
+            desconto = Decimal(str(item.get("desconto") or 0))
             descricao = str(item["servico"])
-        except (KeyError, TypeError, ValueError):
+        except (KeyError, TypeError, ValueError, InvalidOperation):
             abort(400, description="Um dos itens do orçamento é inválido.")
 
         total_item = (quantidade * valor_unitario) - desconto
@@ -63,12 +69,9 @@ def orcamento():
             "total": total_item,
         })
 
-    subtotal = sum(
-        item["quantidade"] * item["valor_unitario"]
-        for item in itens
-    )
-    valor_desconto = sum(item["desconto"] for item in itens)
-    total = subtotal - valor_desconto
+    subtotal = calcular_subtotal(itens, "valor_unitario")
+    valor_desconto = calcular_desconto(itens)
+    total = calcular_total(subtotal, valor_desconto)
 
     context = {
         "nome_sua_empresa": nome_sua_empresa,
@@ -103,3 +106,61 @@ def contato():
 @app.route("/sobre")
 def sobre():
     return render_template("sobre.html")
+
+@app.route("/atualizar-subtotal", methods=["POST"])
+def atualizar_subtotal():
+    itens = request.get_json(silent=True)
+
+    validar_itens_json(itens)
+    try:
+        subtotal = calcular_subtotal(itens, "valor")
+    except (KeyError, TypeError, InvalidOperation):
+        abort(400, description="Um dos itens do orçamento é inválido.")
+
+    return jsonify({"subtotal": str(subtotal)})
+
+@app.route("/atualizar-desconto", methods=["POST"])
+def atualizar_desconto():
+    itens = request.get_json(silent=True)
+
+    validar_itens_json(itens)
+    try:
+        valor_desconto = calcular_desconto(itens)
+    except (KeyError, TypeError, InvalidOperation):
+        abort(400, description="Um dos itens do orçamento é inválido.")
+
+    return jsonify({"desconto": str(valor_desconto)})
+
+@app.route("/atualizar-total", methods=["POST"])
+def atualizar_total():
+    itens = request.get_json(silent=True)
+
+    validar_itens_json(itens)
+    try:
+        subtotal = calcular_subtotal(itens, "valor")
+        valor_desconto = calcular_desconto(itens)
+    except (KeyError, TypeError, InvalidOperation):
+        abort(400, description="Um dos itens do orçamento é inválido.")
+
+    total = calcular_total(subtotal, valor_desconto)
+    return jsonify({"total": str(total)})
+
+
+def validar_itens_json(itens):
+    if not isinstance(itens, list):
+        abort(400, description="A lista de itens do orçamento é inválida.")
+
+
+def calcular_subtotal(itens, chave_valor):
+    return sum(
+        Decimal(str(item["quantidade"])) * Decimal(str(item[chave_valor]))
+        for item in itens
+    )
+
+
+def calcular_desconto(itens):
+    return sum(Decimal(str(item["desconto"])) for item in itens)
+
+
+def calcular_total(subtotal, valor_desconto):
+    return subtotal - valor_desconto

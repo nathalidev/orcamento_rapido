@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const inserirValidade = document.getElementById("inserir_validade");
   const campoValidade = document.getElementById("campo-validade");
   const dataValidade = document.getElementById("data_validade");
-  dataValidade.min = hoje;
+  dataValidade.min = new Date().toISOString().split("T")[0];
   dataValidade.max = "9999-12-31";
   
   // Itens
@@ -50,15 +50,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const regex = /^[A-Za-zÀ-ÿ\s]+$/;
 
-    function exibirValidade() {
-        inserirValidade.addEventListener("change", function () {
-            if (this.value === "sim") {
-                campoValidade.style.display = "block";
-            } else {
-                campoValidade.style.display = "none";
-            }
-        });
-    }
 
     function pegarValorExibir(campoDoInput, campoDoOrcamento, doc) {
         const campoEmpresa = document.getElementById(campoDoInput);
@@ -76,8 +67,6 @@ document.addEventListener('DOMContentLoaded', () => {
         ["telefone_cliente", "telefone-cliente"],
         ["email_cliente", "email-cliente"],
 
-        ["data_validade", "validade"],
-
         ["observacoes", "observacoes-adicionais"],
         ["prazo", "preview_prazo"],
         ["condicoes_pagamento", "preview_condicoes_pagamento"]
@@ -85,7 +74,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     
     const iframe = document.getElementById("meuIframe");
-
     function iniciarPreview() {
         const doc = iframe.contentDocument;
 

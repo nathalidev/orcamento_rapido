@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/formularios.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/criar_orcamento.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 </head>
 <body>
     
@@ -22,6 +23,10 @@
         </ul>
     </nav>
     <main>
+        <div id="app">
+            <p v-text="message"></p>
+            <input type="text" v-model="message">
+        </div>
         <div class="orcamento-layout">
             <section class="conteudo-main" aria-labelledby="info-orcamento">
                 <header class="header-texto">
@@ -180,6 +185,18 @@
     <script src="{{ url_for('static', filename='js/preview.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/big.js@6.2.2/big.min.js"></script>
     <script src="{{ url_for('static', filename='js/itens_orcamento.js') }}"></script>
+    <script>
+    const { createApp, ref } = Vue
+
+    createApp({
+        setup() {
+        const message = ref('Hello vue!')
+        return {
+            message
+        }
+        }
+    }).mount('#app')
+    </script>
 </body>
 </html>
 

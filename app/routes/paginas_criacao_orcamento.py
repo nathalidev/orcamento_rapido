@@ -27,11 +27,18 @@ def orcamento():
 
     inserir_validade = request.form.get("inserir_validade")
     data_validade_ingles = request.form.get("data_validade")
-    data_validade = datetime.strptime(data_validade_ingles, "%Y-%m-%d").strftime("%d/%m/%Y") if data_validade_ingles else "00/00/0000"
+    try:
+        data_validade = datetime.strptime(data_validade_ingles, "%Y-%m-%d").strftime("%d/%m/%Y") if data_validade_ingles else "00/00/0000"
+    except ValueError:
+        abort(400, description="A data de validade é inválida.")
 
     observacoes_adicionais = request.form.get("observacoes") if request.form.get("observacoes") != None else "Insira dados"
     prazo_entrega_ingles = request.form.get("prazo")
-    prazo_entrega = datetime.strptime(prazo_entrega_ingles, "%Y-%m-%d").strftime("%d/%m/%Y") if prazo_entrega_ingles else "00/00/0000"
+    try: 
+        prazo_entrega = datetime.strptime(prazo_entrega_ingles, "%Y-%m-%d").strftime("%d/%m/%Y") if prazo_entrega_ingles else "00/00/0000"
+    except ValueError:
+        abort(400, description="O prazo de entrega é inválido.")
+
     condicoes_pagamento = request.form.get("condicoes_pagamento") if request.form.get("condicoes_pagamento") != None else "Insira dados"
     data_hoje = datetime.now().strftime("%d/%m/%Y")
 
@@ -43,9 +50,6 @@ def orcamento():
 
     if not isinstance(itens_recebidos, list):
         abort(400, description="A lista de itens do orçamento deve ser uma lista.")
-    if len(itens_recebidos) == 0:
-        abort(400, description="A lista de itens do orçamento não pode estar vazia.")
-
     itens = []
     for item in itens_recebidos:
         try:

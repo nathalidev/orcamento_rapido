@@ -1,0 +1,3 @@
+Resumo prático: v-model vs v-text no Vue.js
+• Entrada de dados (v-model): Funciona apenas em elementos de interação como <input>, <select> e <textarea>. Ele cria uma via de mão dupla (captura o que você digita ou escolhe e salva direto na variável).
+• Exibição de dados (v-text): Funciona apenas em tags que exibem texto interno, como <p>, <span> e <div>. Ele cria uma via de mão única (pega o valor da variável e apenas mostra na tela).

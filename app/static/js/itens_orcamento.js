@@ -121,7 +121,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // RENDERIZAR ITENS NO IFRAME
     // --------------------------------
 
-    function renderizarItens() {
+    async function renderizarItens() {
 
         const doc =
             iframe.contentDocument;
@@ -178,10 +178,31 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
             // Calcula o total do item
-            const total = new Big(item.valor)
-                .times(item.quantidade)
-                .minus(item.desconto);
+            try {
+                const respostaTotalItem = await fetch("/calcular-total-item", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(item)
+                });
 
+                if (!respostaTotalItem.ok) {
+                    throw new Error(
+                        `Falha ao calcular total do item: HTTP ${respostaTotalItem.status}`
+                    );
+                }
+
+                const dadosTotalItem = await respostaTotalItem.json();
+                var total = new Big(dadosTotalItem.total_item);
+            } catch (erro) {
+                console.error(
+                    "Não foi possível calcular o total do item.",
+                    erro
+                );
+
+                var total = new Big(0);
+            }
 
             colunaServico.textContent =
                 item.servico;

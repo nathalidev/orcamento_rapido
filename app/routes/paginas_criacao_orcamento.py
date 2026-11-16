@@ -145,6 +145,23 @@ def atualizar_total():
     total = calcular_total(subtotal, valor_desconto)
     return jsonify({"total": str(total)})
 
+@app.route("/atualizar-total-item", methods=["POST"])
+def atualizar_total_item():
+    item = request.get_json(silent=True)
+
+    if not isinstance(item, dict):
+        abort(400, description="O item do orçamento é inválido.")
+
+    try:
+        quantidade = Decimal(str(item["quantidade"]))
+        valor_unitario = Decimal(str(item["valor"]))
+        desconto = Decimal(str(item.get("desconto") or 0))
+    except (KeyError, TypeError, ValueError, InvalidOperation):
+        abort(400, description="Um dos valores do item é inválido.")
+
+    total_item = (quantidade * valor_unitario) - desconto
+    return jsonify({"total_item": str(total_item)})
+
 
 def validar_itens_json(itens):
     if not isinstance(itens, list):

@@ -306,3 +306,55 @@ footer {
     padding: 10px;
     border-radius: 8px;
 }
+
+
+@media print {
+    @page {
+        size: A4;
+        margin: 12mm;
+    }
+
+    html, body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        background: white;
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+    }
+
+    body {
+        gap: 12px;
+    }
+
+    .orcamento {
+        overflow: visible;
+        break-inside: avoid;
+    }
+
+    .dados-empresas,
+    .descricao-valores,
+    .descricao-valores2,
+    footer {
+        break-inside: avoid;
+    }
+
+    table {
+        width: 100%;
+        break-inside: auto;
+    }
+
+    thead {
+        display: table-header-group;
+    }
+
+    tr {
+        break-inside: avoid;
+    }
+
+    /* Esconde a coluna de ações na impressão */
+    th:last-child,
+    td:last-child {
+        display: none;
+    }
+}

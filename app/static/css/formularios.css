@@ -80,13 +80,13 @@
   background: rgba(204, 204, 204, 0.8);
 }
 
-.conteudo-main button[type="submit"],
+#imprimir-orcamento,
 #adicionar-item {
   background: var(--cor-principal);
   color: var(--cor-fundo);
 }
 
-.conteudo-main button[type="submit"]:active,
+#imprimir-orcamento:active,
 #adicionar-item:active {
   background: rgb(3, 18, 63);
 }

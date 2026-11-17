@@ -155,7 +155,7 @@ document.addEventListener("DOMContentLoaded", () => {
         lista.innerHTML = "";
 
 
-        itens.forEach((item, index) => {
+        for (const[index, item] of itens.entries()) {
 
             const linha =
                 doc.createElement("tr");
@@ -179,7 +179,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // Calcula o total do item
             try {
-                const respostaTotalItem = await fetch("/calcular-total-item", {
+                const respostaTotalItem = await fetch("/atualizar-total-item", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -200,8 +200,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     "Não foi possível calcular o total do item.",
                     erro
                 );
+                return;
 
-                var total = new Big(0);
             }
 
             colunaServico.textContent =
@@ -292,7 +292,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 linha
             );
 
-        });
+        };
     }
 
 

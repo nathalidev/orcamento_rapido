@@ -1,6 +1,6 @@
 import json
 from decimal import Decimal, InvalidOperation
-from datetime import datetime
+from datetime import datetime, date
 
 from flask import abort, jsonify, render_template, request
 
@@ -31,6 +31,22 @@ def orcamento():
         data_validade = datetime.strptime(data_validade_ingles, "%Y-%m-%d").strftime("%d/%m/%Y") if data_validade_ingles else "00/00/0000"
     except ValueError:
         abort(400, description="A data de validade é inválida.")
+        
+    if inserir_validade == "sim":
+        if not data_validade:
+            raise ValueError(
+                "Informe a data de validade"
+            )
+
+        validade = datetime.strptime(
+            data_validade,
+            "%Y-%m-%d"
+        ).date()
+
+        if validade < date.today():
+            raise ValueError(
+                "A data de validade deve ser hoje ou futura"
+            )
 
     observacoes_adicionais = request.form.get("observacoes") if request.form.get("observacoes") != None else "Insira dados"
     prazo_entrega_ingles = request.form.get("prazo")
@@ -54,8 +70,14 @@ def orcamento():
     for item in itens_recebidos:
         try:
             quantidade = Decimal(str(item["quantidade"]))
+            if quantidade <= 0:
+                abort(400, description="A quantidade de um item não pode ser negativa.")
             valor_unitario = Decimal(str(item["valor"]))
+            if valor_unitario <= 0:
+                abort(400, description="O valor unitário de um item não pode ser negativo.")
             desconto = Decimal(str(item.get("desconto") or 0))
+            if desconto < 0:
+                abort(400, description="O desconto de um item não pode ser negativo.")
             descricao = str(item["servico"])
         except (KeyError, TypeError, ValueError, InvalidOperation):
             abort(400, description="Um dos itens do orçamento é inválido.")
@@ -154,8 +176,14 @@ def atualizar_total_item():
 
     try:
         quantidade = Decimal(str(item["quantidade"]))
+        if quantidade <= 0:
+            abort(400, description="A quantidade do item não pode ser negativa.")
         valor_unitario = Decimal(str(item["valor"]))
+        if valor_unitario <= 0:
+            abort(400, description="O valor unitário do item não pode ser negativo.")
         desconto = Decimal(str(item.get("desconto") or 0))
+        if desconto < 0:
+            abort(400, description="O desconto do item não pode ser negativo.")
     except (KeyError, TypeError, ValueError, InvalidOperation):
         abort(400, description="Um dos valores do item é inválido.")
 

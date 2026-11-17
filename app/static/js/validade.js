@@ -18,4 +18,10 @@ function exibirValidade(inserirValidade) {
 
     campoValidade.style.display =
         inserirValidade.value === "sim" ? "block" : "none";
+    
+    campoValidade.querySelector("input").required =
+        inserirValidade.value === "sim";
+
+    document.getElementById("data_validade").min =
+        new Date().toISOString().split("T")[0];
 }

@@ -111,4 +111,23 @@ document.addEventListener('DOMContentLoaded', () => {
     if (iframe.contentDocument.readyState === "complete") {
         iniciarPreview();
     }
+
+
+    function imprimirOrcamento() {
+        const iframe = document.getElementById("meuIframe");
+
+        if (!iframe || !iframe.contentWindow) {
+            console.error("Não foi possível acessar o orçamento.");
+            return;
+        }
+
+        iframe.contentWindow.print();
+    }
+
+    const botaoImprimir = document.getElementById("imprimir-orcamento");
+
+    if (botaoImprimir) {
+        botaoImprimir.addEventListener("click", imprimirOrcamento);
+    }
+
 });

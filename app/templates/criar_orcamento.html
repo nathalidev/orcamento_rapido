@@ -11,7 +11,7 @@
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 </head>
 <body>
-    
+
     <nav aria-label="Navegação principal">
         <ul class="ul-navbar">
             <li>
@@ -34,7 +34,7 @@
                     <p>Preencha as informações abaixo para gerar seu orçamento.</p>
                 </header>
                 
-                <form method="POST" action="/orcamento"> <!-- o método define como os dados são transmitidos ao servidor. //  O atributo action do <form> define para qual rota/endpoint os dados serão enviados.Exemplo: <form action="/login" method="POST"> → os dados vão para a rota /login do Flask, que deve estar configurada para aceitar POST.-->
+                <form class="form-criar-orcamento" method="POST" action="/orcamento"> <!-- o método define como os dados são transmitidos ao servidor. //  O atributo action do <form> define para qual rota/endpoint os dados serão enviados.Exemplo: <form action="/login" method="POST"> → os dados vão para a rota /login do Flask, que deve estar configurada para aceitar POST.-->
                     <fieldset>
                         <legend id="info-orcamento">
                             <span class="material-symbols-outlined" aria-hidden="true">assignment_add</span>
@@ -43,8 +43,8 @@
 
                         <!-- Sua empresa -->
                         <div>
-                            <label for="sua_empresa">Nome da sua empresa</label>
-                            <input type="text" id="sua_empresa" name="sua_empresa" required>
+                            <label for="sua-empresa">Nome da sua empresa</label>
+                            <input type="text" id="sua-empresa" name="sua_empresa" required>
                         </div>
 
                         <div>
@@ -53,49 +53,102 @@
                         </div>
 
                         <div>
-                            <label for="seu_site">Seu site</label>
-                            <input type="url" id="seu_site" name="seu_site" placeholder="https://www.seusite.com">
+                            <label for="seu-site">Seu site</label>
+                            <input type="url" id="seu-site" name="seu_site" placeholder="https://www.seusite.com">
                         </div>
 
                         <div>
-                            <label for="telefone_sua_empresa">Telefone da sua empresa</label>
-                            <input type="tel" id="telefone_sua_empresa" name="telefone_sua_empresa" required>
+                            <label for="telefone-sua-empresa">Telefone da sua empresa</label>
+                            <input type="tel" id="telefone-sua-empresa" name="telefone_sua_empresa" required>
                         </div>
+                        
+                        <div>
+                            <label for="cep-empresa">CEP da sua empresa</label>
+                            <input type="text" id="cep-empresa" name="cep_empresa" required>
+                            <button type="button" class="botao-orcamento" id="busca-via-cep-empresa">Buscar informações de endereço da sua empresa via CEP</button>
+                        </div>
+
+                        <div>
+                            <label for="logradouro-empresa">Logradouro da sua empresa</label>
+                            <input type="text" id="logradouro-empresa" name="logradouro_empresa" required>
+                        </div>
+
+                        <div>
+                            <label for="bairro-empresa">Bairro da sua empresa</label>
+                            <input type="text" id="bairro-empresa" name="bairro_empresa" required>
+                        </div>
+
+                        <div>
+                            <label for="cidade-empresa">Cidade da sua empresa</label>
+                            <input type="text" id="cidade-empresa" name="cidade_empresa" required>
+                        </div>
+
+                        <div>
+                            <label for="estado-empresa">Estado da sua empresa</label>
+                            <input type="text" id="estado-empresa" name="estado_empresa" required>
+                        </div>
+
 
                         <!-- Cliente -->
                         <div>
-                            <label for="nome_cliente">Nome do cliente</label>
-                            <input type="text" id="nome_cliente" name="nome_cliente" required>
+                            <label for="nome-cliente">Nome do cliente</label>
+                            <input type="text" id="nome-cliente" name="nome_cliente" required>
                         </div>
 
                         <div>
-                            <label for="telefone_cliente">Telefone do cliente</label>
-                            <input type="tel" id="telefone_cliente" name="telefone_cliente" required>
+                            <label for="telefone-cliente">Telefone do cliente</label>
+                            <input type="tel" id="telefone-cliente" name="telefone_cliente" required>
                         </div>
 
                         <div>
-                            <label for="email_cliente">E-mail do cliente</label>
-                            <input type="email" id="email_cliente" name="email_cliente" required>
+                            <label for="email-cliente">E-mail do cliente</label>
+                            <input type="email" id="email-cliente" name="email_cliente" required>
                         </div>
+                        <div>
+                            <label for="cep-cliente">CEP do cliente</label>
+                            <input type="text" id="cep-cliente" name="cep_cliente" required>
+                            <button type="button" class="botao-orcamento" id="busca-via-cep-cliente">Buscar informações de endereço do cliente via CEP</button>
+                        </div>
+
+                        <div>
+                            <label for="logradouro-cliente">Logradouro do cliente</label>
+                            <input type="text" id="logradouro-cliente" name="logradouro_cliente" required>
+                        </div>
+
+                        <div>
+                            <label for="bairro-cliente">Bairro do cliente</label>
+                            <input type="text" id="bairro-cliente" name="bairro_cliente" required>
+                        </div>
+
+                        <div>
+                            <label for="cidade-cliente">Cidade do cliente</label>
+                            <input type="text" id="cidade-cliente" name="cidade_cliente" required>
+                        </div>
+
+                        <div>
+                            <label for="estado-cliente">Estado do cliente</label>
+                            <input type="text" id="estado-cliente" name="estado_cliente" required>
+                        </div>
+
 
                         <!-- Validade -->
                         <div>
-                            <label for="inserir_validade">Inserir validade no orçamento?</label>
-                            <select id="inserir_validade" name="inserir_validade">
+                            <label for="inserir-validade">Inserir validade no orçamento?</label>
+                            <select id="inserir-validade" name="inserir_validade">
                                 <option value="sim">Sim</option>
                                 <option value="nao">Não</option>
                             </select>
                         </div>
 
                         <div id="campo-validade" style="display: none;">
-                            <label for="data_validade">Validade</label>
-                            <input type="date" id="data_validade" name="data_validade">
+                            <label for="data-validade">Validade</label>
+                            <input type="date" id="data-validade" name="data_validade">
                         </div>
 
                         <!-- Itens -->
                         <div>
-                            <label for="servico_item">Serviço / Item</label>
-                            <input type="text" id="servico_item" name="servico_item">
+                            <label for="servico-item">Serviço / Item</label>
+                            <input type="text" id="servico-item" name="servico_item">
                         </div>
 
                         <div>
@@ -114,10 +167,10 @@
                         </div>
 
                         <div>
-                            <button type="button" id="adicionar-item"> + Adicionar item</button>
+                            <button type="button" class="botao-orcamento" id="adicionar-item"> + Adicionar item</button>
                         </div>
 
-                        <input type="hidden" id="itens_orcamento" name="itens_orcamento">
+                        <input type="hidden" id="itens-orcamento" name="itens_orcamento">
 
                         <!-- Observações -->
                         <div>
@@ -133,8 +186,8 @@
 
                         <!-- Condições de pagamento -->
                         <div>
-                            <label for="condicoes_pagamento">Condições de pagamento</label>
-                            <input type="text" id="condicoes_pagamento" name="condicoes_pagamento"
+                            <label for="condicoes-pagamento">Condições de pagamento</label>
+                            <input type="text" id="condicoes-pagamento" name="condicoes_pagamento"
                                 placeholder="Ex: À vista ou em até 3× sem juros">
                         </div>
                     </fieldset>
@@ -148,11 +201,11 @@
                     </fieldset>
 
                     <div>
-                        <button type="reset">
+                        <button type="reset" class="botao-orcamento botao-limpar">
                             <span class="material-symbols-outlined" aria-hidden="true">delete_forever</span>
                             Limpar campos
                         </button>
-                        <button type="button" id="imprimir-orcamento">
+                        <button type="button" class="botao-orcamento" id="imprimir-orcamento">
                             <span class="material-symbols-outlined simbolo-pdf">picture_as_pdf</span>
                             Gerar PDF
                         </button>

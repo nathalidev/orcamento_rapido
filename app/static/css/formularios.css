@@ -21,6 +21,10 @@
   gap: 0.75rem;
 }
 
+.form-criar-orcamento fieldset {
+  gap: 3rem;
+}
+
 .conteudo-main legend {
   font-weight: 700;
   padding: 0 0.35rem;
@@ -61,7 +65,9 @@
   justify-content: flex-end;
 }
 
-.conteudo-main button {
+.conteudo-main .botao-orcamento {
+  background: var(--cor-principal);
+  color: var(--cor-fundo);
   border: none;
   border-radius: 8px;
   padding: 0.7rem 1rem;
@@ -70,25 +76,18 @@
   font-weight: 700;
 }
 
-.conteudo-main button[type="reset"] {
+.conteudo-main .botao-orcamento:active {
+  background: rgb(3, 18, 63);
+}
+
+.conteudo-main .botao-limpar {
   background: rgba(255, 255, 255, 0.8);
   color: var(--cor-texto);
-  border: 1px solid rgba(0, 23, 82, 0.25);
+  border: 2px solid rgb(10, 46, 87);
 }
 
-.conteudo-main button[type="reset"]:active {
+.conteudo-main .botao-limpar:active {
   background: rgba(204, 204, 204, 0.8);
-}
-
-#imprimir-orcamento,
-#adicionar-item {
-  background: var(--cor-principal);
-  color: var(--cor-fundo);
-}
-
-#imprimir-orcamento:active,
-#adicionar-item:active {
-  background: rgb(3, 18, 63);
 }
 
 #form-contato{
@@ -110,7 +109,7 @@
     align-items: stretch;
   }
 
-  .conteudo-main button {
+  .conteudo-main .botao-orcamento {
     width: 100%;
   }
 }

@@ -1,7 +1,73 @@
 document.addEventListener("DOMContentLoaded", () => {
 
+    const suaEmpresa =
+        document.getElementById("sua-empresa");
+
+    const emailEmpresa =
+        document.getElementById("email");
+
+    const siteEmpresa =
+        document.getElementById("seu-site");
+
+    const telefoneEmpresa =
+        document.getElementById("telefone-sua-empresa");
+
+    const cepEmpresa =
+        document.getElementById("cep-empresa");
+
+    const logradouroEmpresa =
+        document.getElementById("logradouro-empresa");
+
+    const bairroEmpresa =
+        document.getElementById("bairro-empresa");
+
+    const cidadeEmpresa =
+        document.getElementById("cidade-empresa");
+
+    const estadoEmpresa =
+        document.getElementById("estado-empresa");
+
+    const nomeCliente =
+        document.getElementById("nome-cliente");
+
+    const telefoneCliente =
+        document.getElementById("telefone-cliente");
+
+    const emailCliente =
+        document.getElementById("email-cliente");
+
+    const cepCliente =
+        document.getElementById("cep-cliente");
+
+    const logradouroCliente =
+        document.getElementById("logradouro-cliente");
+
+    const bairroCliente =
+        document.getElementById("bairro-cliente");
+
+    const cidadeCliente =
+        document.getElementById("cidade-cliente");
+
+    const estadoCliente =
+        document.getElementById("estado-cliente");
+
+    const inserirValidade =
+        document.getElementById("inserir-validade");
+
+    const dataValidade =
+        document.getElementById("data-validade");
+
+    const observacoes =
+        document.getElementById("observacoes");
+
+    const prazo =
+        document.getElementById("prazo");
+
+    const condicoesPagamento =
+        document.getElementById("condicoes-pagamento");
+
     const servico =
-        document.getElementById("servico_item");
+        document.getElementById("servico-item");
 
     const quantidade =
         document.getElementById("quantidade");
@@ -19,12 +85,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const botaoAdicionar =
         document.getElementById("adicionar-item")
 
-    const servicoInput = document.getElementById("servico_item");
+    const botaoCepCliente = document.getElementById("busca-via-cep-cliente");
+
+    const botaoCepEmpresa = document.getElementById("busca-via-cep-empresa");
+
+    const servicoInput =     document.getElementById("servico-item");
     const quantidadeInput = document.getElementById("quantidade");
     const valorInput = document.getElementById("valor");
     const descontoInput = document.getElementById("desconto");
-    const inserirValidade = document.getElementById("inserir_validade");
-
     // Guarda todos os itens adicionados
     let itens = [];
 
@@ -412,7 +480,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function atualizarCampoHidden() {
-        document.getElementById("itens_orcamento").value =
+        document.getElementById("itens-orcamento").value =
             JSON.stringify(itens);
     }
 
@@ -465,7 +533,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const dadosDesconto = await respostaDesconto.json();
             const desconto = new Big(dadosDesconto.desconto);
 
-            doc.getElementById("preview_desconto").textContent =
+            doc.getElementById("preview-desconto").textContent =
                 formatarMoeda(desconto);
 
             const respostaTotal = await fetch("/atualizar-total", {
@@ -489,6 +557,79 @@ document.addEventListener("DOMContentLoaded", () => {
                 formatarMoeda(total);
         } catch (erro) {
             console.error("Não foi possível atualizar o resumo.", erro);
+        }
+    }
+
+    botaoCepCliente.addEventListener(
+        "click",
+        async () => {
+            const data = await buscarDadosViaCep(cepCliente.value);
+
+            if (data) {
+                preencherCamposEndereco(data, "cliente");
+            }
+        }
+    );
+
+    botaoCepEmpresa.addEventListener(
+        "click",
+        async () => {
+            const data = await buscarDadosViaCep(cepEmpresa.value);
+
+            if (data) {
+                preencherCamposEndereco(data, "empresa");
+            }
+        }
+    );
+
+    async function buscarDadosViaCep(cep) {
+        const cepLimpo = cep.replace(/\D/g, "");
+
+        if (!/^\d{8}$/.test(cepLimpo)) {
+            alert("Informe um CEP válido com 8 dígitos.");
+            return null;
+        }
+
+        try {
+            const response = await fetch('/buscar-dados-cep', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ cep: cepLimpo })
+            });
+
+            if (!response.ok) {
+                alert("Não foi possível consultar o CEP.");
+                return null;
+            }
+
+            const data = await response.json();
+
+            if (data.erro) {
+                alert("CEP não encontrado.");
+                return null;
+            }
+
+            return data;
+        } catch (error) {
+            console.error("Erro ao buscar dados via CEP:", error);
+            alert("Não foi possível consultar o CEP.");
+            return null;
+        }
+    }
+
+    function preencherCamposEndereco(data, tipo) {
+        if (tipo === "cliente") {
+            logradouroCliente.value = data.logradouro || "";
+            bairroCliente.value = data.bairro || "";
+            cidadeCliente.value = data.localidade || "";
+            estadoCliente.value = data.uf || "";
+        } else if (tipo === "empresa") {
+            logradouroEmpresa.value = data.logradouro || "";
+            bairroEmpresa.value = data.bairro || "";
+            cidadeEmpresa.value = data.localidade || "";
+            estadoEmpresa.value = data.uf || "";
         }
     }
 

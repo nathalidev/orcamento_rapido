@@ -99,7 +99,7 @@ header p {
     width: 100%;
 }
 
-.card_passo {
+.card-passo {
     display: flex;
     gap: 1.1rem;
     align-items: center;
@@ -114,19 +114,19 @@ header p {
     height: auto;
 }
 
-.card_passo img {
+.card-passo img {
     width: clamp(72px, 8vw, 92px);
     height: auto;
     object-fit: contain;
     flex: 0 0 64px;
 }
 
-.card_passo h3,
-.card_passo p {
+.card-passo h3,
+.card-passo p {
     margin: 0;
 }
 
-.card_passo h3 {
+.card-passo h3 {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -193,7 +193,7 @@ header p {
         gap: 0.75rem;
     }
 
-    .card_passo {
+    .card-passo {
         width: 100%;
         flex: unset;
         flex-direction: row;
@@ -202,17 +202,17 @@ header p {
         padding: 0.75rem;
     }
 
-    .card_passo img {
+    .card-passo img {
         width: clamp(40px, 12vw, 56px);
         flex: 0 0 auto;
     }
 
-    .card_passo h3 {
+    .card-passo h3 {
         white-space: normal;
         font-size: clamp(0.8rem, 4vw, 1.1rem);
     }
 
-    .card_passo p {
+    .card-passo p {
         font-size: clamp(0.7rem, 3.5vw, 0.95rem);
     }
 }

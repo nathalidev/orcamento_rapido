@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const inserirValidade = document.getElementById("inserir_validade");
+    const inserirValidade = document.getElementById("inserir-validade");
 
     exibirValidade(inserirValidade);
 
@@ -22,6 +22,6 @@ function exibirValidade(inserirValidade) {
     campoValidade.querySelector("input").required =
         inserirValidade.value === "sim";
 
-    document.getElementById("data_validade").min =
+    document.getElementById("data-validade").min =
         new Date().toISOString().split("T")[0];
 }

@@ -13,25 +13,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Atualiza o conteúdo do elemento
   
-  const suaEmpresa = document.getElementById("sua_empresa");
+  const suaEmpresa = document.getElementById("sua-empresa");
   const email = document.getElementById("email");
-  const seuSite = document.getElementById("seu_site");
-  const telefoneSuaEmpresa = document.getElementById("telefone_sua_empresa");
+  const seuSite = document.getElementById("seu-site");
+  const telefoneSuaEmpresa = document.getElementById("telefone-sua-empresa");
   
   // Campos do cliente
-  const nomeCliente = document.getElementById("nome_cliente");
-  const telefoneCliente = document.getElementById("telefone_cliente");
-  const emailCliente = document.getElementById("email_cliente");
+  const nomeCliente = document.getElementById("nome-cliente");
+  const telefoneCliente = document.getElementById("telefone-cliente");
+  const emailCliente = document.getElementById("email-cliente");
   
   // Validade
-  const inserirValidade = document.getElementById("inserir_validade");
+  const inserirValidade = document.getElementById("inserir-validade");
   const campoValidade = document.getElementById("campo-validade");
-  const dataValidade = document.getElementById("data_validade");
+  const dataValidade = document.getElementById("data-validade");
   dataValidade.min = new Date().toISOString().split("T")[0];
   dataValidade.max = "9999-12-31";
   
   // Itens
-  const servicoItem = document.getElementById("servico_item");
+  const servicoItem = document.getElementById("servico-item");
     const quantidade = document.getElementById("quantidade");
     const valor = document.getElementById("valor");
     const desconto = document.getElementById("desconto");
@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const prazo = document.getElementById("prazo");
 
     // Condições de pagamento
-    const condicoesPagamento = document.getElementById("condicoes_pagamento");
+    const condicoesPagamento = document.getElementById("condicoes-pagamento");
 
     // Preview
     const meuPreview = document.getElementById("meu-preview");
@@ -58,18 +58,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const campos = [
-        ["sua_empresa", "preview_empresa"],
-        ["email", "preview_email"],
-        ["seu_site", "preview_site"],
-        ["telefone_sua_empresa", "telefone_empresa"],
+        ["sua-empresa", "preview-empresa"],
+        ["email", "preview-email"],
+        ["seu-site", "preview-site"],
+        ["telefone-sua-empresa", "telefone-empresa"],
 
-        ["nome_cliente", "preview-cliente"],
-        ["telefone_cliente", "telefone-cliente"],
-        ["email_cliente", "email-cliente"],
+        ["nome-cliente", "preview-cliente"],
+        ["telefone-cliente", "telefone-cliente"],
+        ["email-cliente", "email-cliente"],
 
         ["observacoes", "observacoes-adicionais"],
-        ["prazo", "preview_prazo"],
-        ["condicoes_pagamento", "preview_condicoes_pagamento"]
+        ["prazo", "preview-prazo"],
+        ["condicoes-pagamento", "preview-condicoes-pagamento"]
     ];
 
     

@@ -1,8 +1,10 @@
 import json
+import re
 from decimal import Decimal, InvalidOperation
 from datetime import datetime, date
 
 from flask import abort, jsonify, render_template, request
+import requests
 
 from app import app
 
@@ -190,7 +192,29 @@ def atualizar_total_item():
     total_item = (quantidade * valor_unitario) - desconto
     return jsonify({"total_item": str(total_item)})
 
+@app.route("/buscar-dados-cep", methods=["POST"])
+def buscar_dados_cep():
+    dados = request.get_json(silent=True)
+    if not dados or "cep" not in dados:
+        abort(400, description="CEP não fornecido.")
+    cep = str(dados["cep"]).strip()
+    if not re.fullmatch(r"\d{8}", cep):
+        abort(400, description="O CEP deve conter exatamente 8 dígitos.")
 
+    url = f"https://viacep.com.br/ws/{cep}/json/"
+    try:
+        response = requests.get(url, timeout=5)
+    except requests.RequestException:
+        abort(502, description="Erro ao consultar o serviço de CEP.")
+
+    if response.status_code != 200:
+        abort(502, description="O serviço de CEP retornou um erro.")
+
+    dados_cep = response.json()
+    if dados_cep.get("erro"):
+        abort(404, description="CEP não encontrado.")
+
+    return jsonify(dados_cep)
 def validar_itens_json(itens):
     if not isinstance(itens, list):
         abort(400, description="A lista de itens do orçamento é inválida.")

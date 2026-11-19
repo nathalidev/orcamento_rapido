@@ -20,10 +20,15 @@
     <body>
         <div class="dados-empresas">
             <div class="sua-empresa">
-                <p id="preview_empresa">{{ nome_sua_empresa }}</p>
-                <p id="preview_email">{{ email_sua_empresa }}</p>
-                <p id="preview_site">{{ site_sua_empresa }}</p>
-                <p id="telefone_empresa">Tel: {{ telefone_sua_empresa }}</p>
+                <p id="preview-empresa">{{ nome_sua_empresa }}</p>
+                <p id="preview-email">{{ email_sua_empresa }}</p>
+                <p id="preview-site">{{ site_sua_empresa }}</p>
+                <p id="telefone-empresa">Tel: {{ telefone_sua_empresa }}</p>
+                <p id="cep-empresa">CEP: {{ cep_empresa }}</p>
+                <p id="logradouro-empresa">Logradouro: {{ logradouro_empresa }}</p>
+                <p id="bairro-empresa">Bairro: {{ bairro_empresa }}</p>
+                <p id="cidade-empresa">Cidade: {{ cidade_empresa }}</p>
+                <p id="estado-empresa">Estado: {{ estado_empresa }}</p>
             </div>
 
             <div class="empresa-cliente">
@@ -33,6 +38,11 @@
                 </div>
                 <p id="telefone-cliente">Tel: {{ telefone_cliente }}</p>
                 <p id="email-cliente">{{ email_cliente }}</p>
+                <p id="cep-cliente">CEP: {{ cep_cliente }}</p>
+                <p id="logradouro-cliente">Logradouro: {{ logradouro_cliente }}</p>
+                <p id="bairro-cliente">Bairro: {{ bairro_cliente }}</p>
+                <p id="cidade-cliente">Cidade: {{ cidade_cliente }}</p>
+                <p id="estado-cliente">Estado: {{ estado_cliente }}</p>
                 <p id="data-hoje">Data: {{ data_hoje }}</p>
                 {% if inserir_validade == "sim" %}
                     <p id="validade">Validade: {{ data_validade }}</p>
@@ -78,7 +88,7 @@
                 </div>
                 <div class="descricao-valores-p">
                     <p>Desconto</p>
-                    <p id="preview_desconto">{{ valor_desconto }}</p>
+                    <p id="preview-desconto">{{ valor_desconto }}</p>
                 </div>
                 <div class="descricao-valores-p">
                     <p>Total</p>
@@ -90,14 +100,14 @@
         <div class="descricao-valores2">
             <div>
                 <h2>Prazo de Entrega</h2>
-                <p id="preview_prazo">
+                <p id="preview-prazo">
                     <span class="material-symbols-outlined">timer</span>
                     {{ prazo_entrega }}
                 </p>
             </div>
             <div>
                 <h2>Condições de pagamento</h2>
-                <p id="preview_condicoes_pagamento">
+                <p id="preview-condicoes-pagamento">
                     <span class="material-symbols-outlined">payment_arrow_down</span>
                     {{ condicoes_pagamento }}
                 </p>

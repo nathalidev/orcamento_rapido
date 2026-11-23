@@ -137,3 +137,153 @@ Neste caso:
 - `v-model` captura o valor digitado.
 - `v-text` exibe o valor.
 - `v-bind` atualiza o atributo `src` da imagem.
+
+---
+
+## Renderização Condicional (`v-if`, `v-else-if` e `v-else`)
+
+As diretivas condicionais do Vue permitem mostrar ou remover elementos do DOM de acordo com o resultado de uma expressão (verdadeira ou falsa). Elas funcionam de forma idêntica à estrutura `if / else if / else` do JavaScript.
+
+### Como funciona cada diretiva
+
+* **`v-if`**: Renderiza o bloco apenas se a condição for verdadeira (`true`).
+* **`v-else-if`**: Testa uma nova condição caso o `v-if` (ou outro `v-else-if`) anterior seja falso. Pode ser encadeado várias vezes.
+* **`v-else`**: Funciona como um "caso contrário" padrão. Não recebe nenhuma expressão e é exibido quando todas as condições anteriores falham.
+
+> **⚠️ Regra de ouro:** Os elementos com `v-else-if` e `v-else` precisam ser **irmãos imediatos** do elemento com `v-if`. Não pode haver nenhuma outra tag HTML solta entre eles, senão o Vue não reconhece o bloco e gera um erro.
+
+---
+
+### Exemplo prático (Sistema de Notas)
+
+```vue
+<script setup>
+import { ref } from 'vue'
+
+const nota = ref(8)
+</script>
+
+<template>
+  <div>
+    <p>Nota atual: {{ nota }}</p>
+
+    <p v-if="nota >= 7">Aprovado!</p>
+    <p v-else-if="nota >= 5">Em recuperação.</p>
+    <p v-else>Reprovado.</p>
+  </div>
+</template>
+```
+
+### Condicionais em múltiplos elementos (`<template>`)
+
+Para aplicar uma condição a vários elementos ao mesmo tempo sem criar uma `<div>` extra no HTML final, envolva o grupo com a tag `<template>`:
+
+```vue
+<template v-if="usuarioLogado">
+  <h2>Painel de Controle</h2>
+  <p>Bem-vindo de volta!</p>
+</template>
+```
+> **Nota:** A tag `<template>` não vira um elemento físico (real) no navegador. Ela funciona apenas como um **agrupador simbólico** (um "invólucro fantasma") que o Vue lê na hora de montar a tela para saber quais elementos obedecem àquela condição, e depois a descarta.
+
+# Diretiva `v-for` no Vue.js
+
+A diretiva `v-for` é usada para renderizar listas de elementos no HTML de forma dinâmica e reativa, funcionando como um laço de repetição (`for` ou `forEach`) diretamente no template.
+
+Sempre que a fonte de dados (array ou objeto) é alterada, o Vue atualiza a interface automaticamente.
+
+---
+
+## Sintaxe Básica
+
+```html
+<elemento v-for="item in lista" :key="item.id">
+  {{ item }}
+</elemento>
+```
+
+> **Nota:** É possível substituir `in` por `of` (`v-for="item of lista"`). Ambos funcionam da mesma maneira.
+
+---
+
+## Parâmetros do `v-for`
+
+Os parâmetros disponíveis variam de acordo com o tipo de dado percorrido:
+
+### 1. Percorrendo um Array (Lista)
+Aceita até **2 parâmetros**: `(item, index)`
+* **`item`:** O elemento atual da lista.
+* **`index` *(opcional)*:** A posição numérica do item (começa em `0`).
+
+```html
+<ul>
+  <li v-for="(produto, index) in produtos" :key="produto.id">
+    {{ index }} - {{ produto.nome }} (R\$ {{ produto.preco }})
+  </li>
+</ul>
+```
+
+*(Também suporta desestruturação: `v-for="({ id, nome }, index) in produtos"`)*
+
+### 2. Percorrendo um Objeto
+Aceita até **3 parâmetros**: `(valor, chave, index)`
+* **`valor`:** O conteúdo da propriedade.
+* **`chave` *(opcional)*:** O nome da propriedade.
+* **`index` *(opcional)*:** A posição numérica da propriedade no objeto (começa em `0`).
+
+```html
+<ul>
+  <li v-for="(valor, chave, index) in usuario" :key="chave">
+    {{ index }} | {{ chave }}: {{ valor }}
+  </li>
+</ul>
+```
+
+### 3. Percorrendo um Número (Intervalo)
+Aceita até **2 parâmetros**: `(numero, index)`
+* **`numero`:** O valor atual da contagem (começa em `1` e vai até o limite informado).
+* **`index` *(opcional)*:** A posição numérica (começa em `0`).
+
+```html
+<span v-for="(n, index) in 5" :key="n">
+  Item {{ n }} (índice {{ index }})
+</span>
+```
+
+---
+
+## A importância do atributo `:key`
+
+O atributo `:key` deve receber um identificador único (como um `id`) para cada item renderizado:
+
+* **Rastreamento:** Permite que o Vue identifique exatamente qual item foi adicionado, removido ou reordenado.
+* **Performance:** Evita que toda a lista seja redesenhada no DOM quando apenas um item sofre alteração.
+* **Boa prática:** Evite usar o `index` como `:key` caso a lista possa sofrer ordenação, filtragem ou remoção de itens no meio.
+
+---
+
+## Diretiva `v-on` (e o atalho `@`) no Vue.js
+
+A diretiva **`v-on`** (geralmente abreviada pelo símbolo **`@`**) é usada para **escutar eventos do DOM** — como cliques, digitação ou envio de formulários — e executar uma função ou expressão JavaScript quando eles ocorrem.
+
+### Sintaxe básica
+
+```html
+<!-- Forma completa -->
+<button v-on:click="contador++">Adicionar</button>
+
+<!-- Forma abreviada (padrão no dia a dia) -->
+<button @click="salvarDados">Salvar</button>
+```
+
+### Principais usos e modificadores
+
+* **Eventos mais comuns:** `@click` (clique), `@input` (enquanto digita), `@change` (ao alterar um campo), `@submit` (envio de formulário) e `@keyup` (ao soltar uma tecla).
+* **Passagem de parâmetros:** Permite enviar argumentos diretamente para os métodos:
+  ```html
+  <button @click="removerItem(item.id)">Remover</button>
+  ```
+* **Modificadores de evento:** Atalhos integrados que substituem códigos manuais como `event.preventDefault()`:
+  * `@submit.prevent="enviarFormulario"` — evita o recarregamento da página no envio do formulário.
+  * `@click.stop="abrirMenu"` — impede a propagação do clique para elementos pais.
+  * `@keyup.enter="pesquisar"` — executa a ação apenas ao pressionar a tecla **Enter**.

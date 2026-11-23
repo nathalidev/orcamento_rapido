@@ -66,6 +66,33 @@ footer {
   overflow: visible;
 }
 
+.product-display {
+  display: block;
+  width: 100%;
+}
+
+.product-container {
+  display: flex;
+  gap: 3rem;
+}
+
+.product-image,
+.product-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.product-image {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.product-info {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
 .header-texto {
   min-height: 6.5rem;
 }

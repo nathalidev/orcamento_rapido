@@ -24,8 +24,26 @@
     </nav>
     <main>
         <div id="app">
-            <p v-text="message"></p>
-            <input type="text" v-model="message">
+            <div class="product-display">
+                <div class="product-container">
+                    <div class="product-image">
+                        <!-- IMAGEM DO PRODUTO -->
+                        <img :src="image" alt="Laranjada">
+                    </div>
+                    <div class="product-info">
+                        <!-- INFO DO PRODUTO -->
+                        <h1 v-text="product_title"></h1>
+                        <p v-if="inStock > 10">In Stock</p>
+                        <p v-else-if="inStock < 10 && inStock > 1">Low Stock</p>
+                        <p v-else>Out of Stock</p>
+                        <ul>
+                            <li v-for="detail in details" v-text="detail"></li>
+                        </ul>
+                        <div v-for="variant in variants" :key="variant.id" class="color-circle" v-text="variant.color"></div>
+                        <button v-on:click="addToCart" :disabled="inStock === 0">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="orcamento-layout">
             <section class="conteudo-main" aria-labelledby="info-orcamento">
@@ -243,10 +261,14 @@
 
     createApp({
         setup() {
-        const message = ref('Hello vue!')
-        return {
-            message
-        }
+
+            return {
+                product_title: ref('Laranjada'),
+                image: ref('{{ url_for("static", filename="images/laranja_teste.png") }}'),
+                inStock: ref(-1),
+                details: ['50% Cotton', '50% Polyester', '20% Wool'],
+                variants: [{id:1, color: 'blue'},{id:2, color: 'green'}]
+            }
         }
     }).mount('#app')
     </script>

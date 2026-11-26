@@ -24,6 +24,7 @@
     </nav>
     <main>
         <div id="app">
+            <div class="cart">Cart: <span v-text="cart"></span></div>
             <div class="product-display">
                 <div class="product-container">
                     <div class="product-image">
@@ -39,7 +40,7 @@
                         <ul>
                             <li v-for="detail in details" v-text="detail"></li>
                         </ul>
-                        <div v-for="variant in variants" :key="variant.id" class="color-circle" v-text="variant.color"></div>
+                        <div v-for="variant in variants" :key="variant.id"  class="color-circle" @mouseover="image = variant.image" v-text="variant.color"></div>
                         <button v-on:click="addToCart" :disabled="inStock === 0">Add to Cart</button>
                     </div>
                 </div>
@@ -262,12 +263,29 @@
     createApp({
         setup() {
 
+            const cart = ref(0) // com ref vira objeto por isso ".value". porem no DOM o valor vai direto.
+
+            const addToCart = () => {
+                cart.value += 1 // no HTML o objeto que o ref cria é desestruturado, por isso não precisa do ".value" no HTML.
+            }
+
+            // o DOM é o HTML depois que o navegador le, monta e desenha ele na tela (renderização). Da pra interagir com JS.
+
+            const image = ref('{{ url_for("static", filename="images/laranja_teste.png") }}');
+
+            const changeImage = (variantimage) => {
+                image.value = variantimage;
+            };
+
             return {
                 product_title: ref('Laranjada'),
-                image: ref('{{ url_for("static", filename="images/laranja_teste.png") }}'),
+                image,
                 inStock: ref(-1),
                 details: ['50% Cotton', '50% Polyester', '20% Wool'],
-                variants: [{id:1, color: 'blue'},{id:2, color: 'green'}]
+                variants: [{id:1, color: 'blue', image: image.value},{id:2, color: 'green', image: '{{ url_for("static", filename="images/maca.jpg") }}'}],
+                cart,
+                addToCart,
+                changeImage
             }
         }
     }).mount('#app')

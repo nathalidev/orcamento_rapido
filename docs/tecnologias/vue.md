@@ -287,3 +287,60 @@ A diretiva **`v-on`** (geralmente abreviada pelo símbolo **`@`**) é usada para
   * `@submit.prevent="enviarFormulario"` — evita o recarregamento da página no envio do formulário.
   * `@click.stop="abrirMenu"` — impede a propagação do clique para elementos pais.
   * `@keyup.enter="pesquisar"` — executa a ação apenas ao pressionar a tecla **Enter**.
+
+# Diferença entre `let` e `ref()` no Vue.js
+
+No Vue.js, a principal diferença entre usar uma variável comum do JavaScript (`let`) e uma variável reativa (`ref()`) está na **atualização da interface (HTML)**.
+
+## Resumo Rápido
+
+| Característica | `let` (JavaScript comum) | `ref()` (Reatividade do Vue) |
+| :--- | :--- | :--- |
+| **Atualiza o HTML automaticamente?** | Não | Sim (em tempo real) |
+| **Monitorado pelo Vue?** | Não | Sim |
+| **Quando a tela muda?** | Apenas se o componente for recriado (ex: refresh `F5` ou troca de rota) | Assim que o `.value` for alterado |
+| **Quando usar?** | Variáveis internas, cálculos temporários e lógica que não vai para a tela | Qualquer dado exibido no `<template>` que possa mudar |
+
+---
+
+## Como funciona na prática
+
+### 1. Usando `let` (Sem reatividade)
+O Vue lê o valor apenas uma vez quando o componente é carregado. Se o valor mudar depois disso, o JavaScript altera o dado na memória, mas o HTML continua "congelado" no valor antigo.
+
+```vue
+<script setup>
+let hamburguer = 'X-Salada'
+
+function trocar() {
+  hamburguer = 'X-Bacon' // Muda na memória, mas não atualiza a tela
+}
+</script>
+
+<template>
+  <p>Pedido: {{ hamburguer }}</p> <!-- Continua exibindo X-Salada -->
+  <button @click="trocar">Trocar</button>
+</template>
+```
+
+### 2. Usando `ref()` (Com reatividade)
+O `ref()` cria um "sensor" em volta do dado. O Vue rastreia todos os lugares do `<template>` que usam aquela variável. Quando `.value` é alterado, o Vue atualiza todos esses pontos automaticamente.
+
+```vue
+<script setup>
+import { ref } from 'vue'
+
+const hamburguer = ref('X-Salada')
+
+function trocar() {
+  hamburguer.value = 'X-Bacon' // Avisa o Vue e atualiza a tela na hora
+}
+</script>
+
+<template>
+  <p>Pedido: {{ hamburguer }}</p> <!-- Atualiza para X-Bacon -->
+  <button @click="trocar">Trocar</button>
+</template>
+```
+
+> **Nota:** No `<script>`, sempre usamos `.value` para ler ou alterar um `ref()`. No `<template>`, o Vue faz isso automaticamente, então basta escrever `{{ hamburguer }}`. Lembrando que em um sistema com flask + vue a exibiçaõ de valores deve ser feita com o v-text `{{}}` espera dados vindos do flask e não do vue. 

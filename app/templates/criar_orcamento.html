@@ -25,6 +25,17 @@
     <main>
         <div id="app">
             <div class="cart">Cart: <span v-text="cart"></span></div>
+            <div class="style-demo">
+                <p :style="{
+                    color: isHighlighted ? '#ffffff' : '#333333',
+                    backgroundColor: isHighlighted ? '#2e7d32' : '#eeeeee'
+                }">
+                    O estilo deste texto muda conforme o estado.
+                </p>
+                <button type="button" @click="isHighlighted = !isHighlighted">
+                    Alternar estilo
+                </button>
+            </div>
             <div class="product-display">
                 <div class="product-container">
                     <div class="product-image">
@@ -33,7 +44,7 @@
                     </div>
                     <div class="product-info">
                         <!-- INFO DO PRODUTO -->
-                        <h1 v-text="product_title"></h1>
+                        <h1 v-text="titleWithBrand"></h1>
                         <p v-if="inStock > 10">In Stock</p>
                         <p v-else-if="inStock < 10 && inStock > 1">Low Stock</p>
                         <p v-else>Out of Stock</p>
@@ -258,12 +269,13 @@
     <script src="https://cdn.jsdelivr.net/npm/big.js@6.2.2/big.min.js"></script>
     <script src="{{ url_for('static', filename='js/itens_orcamento.js') }}"></script>
     <script>
-    const { createApp, ref } = Vue
+    const { createApp, ref, computed } = Vue
 
     createApp({
         setup() {
 
             const cart = ref(0) // com ref vira objeto por isso ".value". porem no DOM o valor vai direto.
+            const isHighlighted = ref(false)
 
             const addToCart = () => {
                 cart.value += 1 // no HTML o objeto que o ref cria é desestruturado, por isso não precisa do ".value" no HTML.
@@ -277,13 +289,21 @@
                 image.value = variantimage;
             };
 
+            const brand = "NathInc";
+            const product_title = 'Laranjada'
+
+            const titleWithBrand = computed(() => {
+                return product_title + " " + brand;
+            });
+
             return {
-                product_title: ref('Laranjada'),
                 image,
+                titleWithBrand,
                 inStock: ref(-1),
                 details: ['50% Cotton', '50% Polyester', '20% Wool'],
                 variants: [{id:1, color: 'blue', image: image.value},{id:2, color: 'green', image: '{{ url_for("static", filename="images/maca.jpg") }}'}],
                 cart,
+                isHighlighted,
                 addToCart,
                 changeImage
             }
